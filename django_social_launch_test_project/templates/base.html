@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}" lang="{{ LANGUAGE_CODE }}">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Social Launcher - {% block title %}{% endblock %}</title>
+</head>
+<body>{% block body %}
+<div id="page">
+	<div id="header">
+	{% block header %}
+	{% if messages %}
+	<ul id="message">
+		{% for message in messages %}
+		<li{% if message.tags %} class ="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+
+	{% endblock header %}
+	</div>
+	<div id="content">
+	{% block content %}{% endblock content %}
+	</div>
+</div>
+{% endblock body %}</body>
+</html>

@@ -3,6 +3,10 @@
 {% block title %}Sign up for this awesome service!{% endblock title %}
 
 {% block content %}
-
+Sign up for this awesome service!
+<form method="POST">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Save" />
 {% endblock content %}
 

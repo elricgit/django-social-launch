@@ -5,14 +5,12 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'django_social_launch_test_project.views.home', name='home'),
-    # url(r'^django_social_launch_test_project/', include('django_social_launch_test_project.foo.urls')),
+	# Uncomment the admin/doc line below to enable admin documentation:
+	url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include('django_social_launch.urls')),
+	# Uncomment the next line to enable the admin:
+	url(r'^admin/', include(admin.site.urls)),
+	
+	(r'^accounts/', include('registration.urls')),
+	url(r'^', include('django_social_launch.urls')),
 )

@@ -1,0 +1,4 @@
+include django_social_launch/templates/social_launch/*
+include django_social_launch_test_project/templates/*
+include LICENSE
+include README	ask sean .md or change file name?
