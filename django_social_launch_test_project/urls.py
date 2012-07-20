@@ -11,6 +11,6 @@ urlpatterns = patterns('',
 	# Uncomment the next line to enable the admin:
 	url(r'^admin/', include(admin.site.urls)),
 	
-	(r'^accounts/', include('registration.urls')),
+	url(r'^accounts/', include('registration.backends.default.urls')),			# changed to url for consistancy??? and updated for registration deprecation
 	url(r'^', include('django_social_launch.urls')),
 )

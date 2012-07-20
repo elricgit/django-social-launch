@@ -27,13 +27,15 @@ def index(request, referring_user_id=None):
 			user.username = user.email
 			user.save()
 			
-			slp = SocialLaunchProfile(user=user, referrer_url='', referring_user=referring_user)
+			slp = SocialLaunchProfile(user=user, referrer_url=form.cleaned_data['referrer_url'], referring_user=referring_user)
 			slp.save()
 			
 			messages.success(request, user_successfully_created_msg)
 			return redirect('social_launch_referral', referring_user_id=user.id)
 	else:
 		form = UserSignupForm()
+		form.fields['referrer_url'].initial = request.META.get('HTTP_REFERER', '')
+		
 	return render(request, 'social_launch/index.html', {'form' : form,})
 	
 
