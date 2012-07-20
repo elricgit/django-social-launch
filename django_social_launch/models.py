@@ -6,7 +6,7 @@ from django.db import models
 
 class SocialLaunchProfile(models.Model):
 	user				= models.OneToOneField(User)
-	referrer_url		= models.URLField(blank=True, max_length=255)
+	referrer_url		= models.CharField(blank=True, max_length=255)
 	referring_user		= models.ForeignKey(User, null=True, related_name='referred_profile_set')
 
 	def __unicode__(self):
