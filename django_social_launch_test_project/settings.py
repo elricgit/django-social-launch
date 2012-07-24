@@ -1,5 +1,6 @@
 # Django settings for django_social_launch_test_project project.
 import os
+import django.conf.global_settings as DEFAULT_SETTINGS
 
 PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 PACKAGE_PARENT_DIR = os.path.dirname(PACKAGE_ROOT)
@@ -122,6 +123,12 @@ TEMPLATE_DIRS = (
 	os.path.join(PACKAGE_ROOT, 'templates'),
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
+	'social_auth.context_processors.social_auth_by_name_backends',
+	'social_auth.context_processors.social_auth_backends',
+	'social_auth.context_processors.social_auth_login_redirect'
+)
+
 INSTALLED_APPS = (
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
@@ -132,6 +139,7 @@ INSTALLED_APPS = (
 	'django.contrib.admin',
 	'django.contrib.admindocs',
 	#3rd Party Apps
+	'debug_toolbar',
 	'registration',
 	'social_auth',
 	#Project Apps
@@ -167,4 +175,10 @@ LOGGING = {
 			'propagate': True,
 		},
 	}
+}
+
+INTERNAL_IPS = ('127.0.0.1',)
+
+DEBUG_TOOLBAR_CONFIG = {
+	'INTERCEPT_REDIRECTS': False,
 }
