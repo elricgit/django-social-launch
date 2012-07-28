@@ -1,10 +1,12 @@
 #Django imports
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.contrib.sessions.backends.db import SessionStore
 
 #App imports
 from ..models import SocialLaunchProfile
-from ..views import user_successfully_created_msg
+from ..views import user_successfully_created_msg, referrer_url_session_key, referring_user_id_session_key
 
 #Test imports
 from .util import BaseTestCase
@@ -20,7 +22,11 @@ class IndexTestCase(BaseTestCase):
 		response = self.client.get(reverse('social_launch_index'), HTTP_REFERER=referrer_url)
 		
 		self.assertEqual(response.status_code, 200)
+<<<<<<< HEAD
 		self.assertContains(response, referrer_url)
+=======
+		self.assertEqual(self.client.session[referrer_url_session_key], referrer_url)
+>>>>>>> b78e863fc11a8645ff4a499a5876b1b1685f37fe
 		
 	def test_post_success_creates_new_user(self):
 		post_data = {'email' : 'foo@example.com'}
@@ -51,7 +57,17 @@ class IndexTestCase(BaseTestCase):
 		
 	def test_post_success_creates_new_user_with_referrer(self):
 		referrer_url = 'http://facebook.com'
+<<<<<<< HEAD
 		post_data = {'email' : 'foo@example.com', 'referrer_url' : referrer_url}
+=======
+		post_data = {'email' : 'foo@example.com'}
+		
+		session = SessionStore()
+		session[referrer_url_session_key] = referrer_url
+		session[referring_user_id_session_key] = ''
+		session.save()
+		self.client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
+>>>>>>> b78e863fc11a8645ff4a499a5876b1b1685f37fe
 		
 		self.assertEqual(User.objects.count(), 1)
 		self.assertEqual(SocialLaunchProfile.objects.count(), 0)
@@ -93,7 +109,17 @@ class IndexTestCase(BaseTestCase):
 		
 	def test_post_fails_invalid_email_with_referrer(self):
 		referrer_url = 'http://facebook.com'
+<<<<<<< HEAD
 		post_data = {'email' : 'fooexample.com', 'referrer_url' : referrer_url}
+=======
+		post_data = {'email' : 'fooexample.com'}
+		
+		session = SessionStore()
+		session[referrer_url_session_key] = referrer_url
+		session[referring_user_id_session_key] = ''
+		session.save()
+		self.client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
+>>>>>>> b78e863fc11a8645ff4a499a5876b1b1685f37fe
 		
 		self.assertEqual(User.objects.count(), 1)
 		self.assertEqual(SocialLaunchProfile.objects.count(), 0)
@@ -105,7 +131,11 @@ class IndexTestCase(BaseTestCase):
 		
 		self.assertEqual(response.status_code, 200)
 		self.assertNotContains(response, user_successfully_created_msg)
+<<<<<<< HEAD
 		self.assertContains(response, referrer_url)
+=======
+		self.assertEqual(self.client.session[referrer_url_session_key], referrer_url)
+>>>>>>> b78e863fc11a8645ff4a499a5876b1b1685f37fe
 		
 	def test_post_fails_no_email(self):
 		post_data = {}
@@ -138,6 +168,11 @@ class ReferralTestCase(BaseTestCase):
 		
 	def test_post_success_creates_new_user(self):
 		post_data = {'email' : 'foo@example.com'}
+		
+		session = SessionStore()
+		session[referring_user_id_session_key] = self.user1.id
+		session.save()
+		self.client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
 		
 		self.assertEqual(User.objects.count(), 1)
 		self.assertEqual(SocialLaunchProfile.objects.count(), 0)

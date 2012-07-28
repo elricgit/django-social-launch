@@ -12,5 +12,9 @@ urlpatterns = patterns('',
 	url(r'^admin/', include(admin.site.urls)),
 	
 	url(r'^accounts/', include('registration.backends.default.urls')),			# changed to url for consistancy??? and updated for registration deprecation
+<<<<<<< HEAD
+=======
+	url(r'', include('social_auth.urls')),
+>>>>>>> b78e863fc11a8645ff4a499a5876b1b1685f37fe
 	url(r'^', include('django_social_launch.urls')),
 )
