@@ -1,0 +1,7 @@
+{% extends "registration/base.html" %}
+
+{% block title %}Activation Complete{% endblock title %}
+
+{% block content %}
+Activation is now complete, please <a href="{% url django.contrib.auth.views.login %}">login</a>.
+{% endblock content %}

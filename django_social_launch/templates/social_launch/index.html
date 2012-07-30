@@ -3,6 +3,7 @@
 {% block title %}Sign up for this awesome service!{% endblock title %}
 
 {% block content %}
+{% if not has_registered %}
 Sign up for this awesome service!
 <form method="POST">
 {% csrf_token %}
@@ -39,5 +40,11 @@ Sign up for this awesome service!
 		</form>
 	</li>
 </ul>
+{% else %}
+<p>This user has referred {{ referrer_count }} user{{ referrer_count|pluralize }}.</p>
+
+
+
+{% endif %}
 {% endblock content %}
 

@@ -5,8 +5,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.sessions.backends.db import SessionStore
 
 #App imports
+from .. import user_successfully_created_msg, referrer_url_session_key, referring_user_id_session_key
 from ..models import SocialLaunchProfile
-from ..views import user_successfully_created_msg, referrer_url_session_key, referring_user_id_session_key
 
 #Test imports
 from .util import BaseTestCase
@@ -181,4 +181,36 @@ class ReferralTestCase(BaseTestCase):
 		self.assertEquals(slp.user, user)
 		self.assertEquals(slp.referrer_url, '')
 		self.assertEquals(slp.referring_user, self.user1)
+		
+	def test_post_success_creates_new_user_bad_referring_used_id(self):
+		post_data = {'email' : 'foo@example.com'}
+		
+		session = SessionStore()
+		session[referring_user_id_session_key] = 1000
+		session.save()
+		self.client.cookies[settings.SESSION_COOKIE_NAME] = session.session_key
+		
+		self.assertEqual(User.objects.count(), 1)
+		self.assertEqual(SocialLaunchProfile.objects.count(), 0)
+		
+		response = self.client.post(reverse('social_launch_referral', kwargs={'referring_user_id' : self.user1.id}), post_data, follow=True)
+		
+		users = User.objects.all()
+		slps = SocialLaunchProfile.objects.all()
+		
+		self.assertEquals(len(users), 2)
+		self.assertEquals(len(slps), 1)
+		
+		user = users[1]
+		slp = slps[0]
+		
+		self.assertRedirects(response, reverse('social_launch_referral', kwargs={'referring_user_id' : user.id}))
+		
+		self.assertEquals(user.email, post_data['email'])
+		self.assertEquals(user.username, post_data['email'])
+		self.assertFalse(user.has_usable_password())
+		self.assertContains(response, user_successfully_created_msg)
+		self.assertEquals(slp.user, user)
+		self.assertEquals(slp.referrer_url, '')
+		self.assertEquals(slp.referring_user, None)
 		

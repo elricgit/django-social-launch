@@ -5,42 +5,30 @@ from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 
 #App imports
+from . import referrer_url_session_key, referring_user_id_session_key, user_successfully_created_msg
 from forms import UserSignupForm
 from models import SocialLaunchProfile
-
-# Create your views here.
-
-user_successfully_created_msg = 'You successfully edited your profile.'
-
-referrer_url_session_key = 'social_launch_referrer_url'
-referring_user_id_session_key = 'social_launch_referring_user_id'
+from registration.backends.default import DefaultBackend
 
 def index(request, referring_user_id=None):
 	referring_user = None
-		
+	has_registered = False
+	referrer_count = None
+	
 	if request.method == 'POST':
 		form = UserSignupForm(request.POST)
 		if form.is_valid():
-			user = form.save(commit=False)
-			user.username = user.email
-			user.save()
-			
-			referrer_url = request.session.get(referrer_url_session_key, '')
-			
-			referring_user_id = request.session.get(referring_user_id_session_key, None)
-			
-			if referring_user_id:
-				try:
-					referring_user = get_object_or_404(User, id=referring_user_id)
-				except ValueError:
-					pass
-			
-			slp = SocialLaunchProfile(
-				user=user,
-				referrer_url=referrer_url,
-				referring_user=referring_user,
+			email = form.cleaned_data['email']
+			user = DefaultBackend().register(
+				request,
+				password1 = None,
+				email = email,
+				username = email,
 			)
-			slp.save()
+			
+			request.session['username'] = user.username
+			
+			SocialLaunchProfile.objects.create_from_request(user, request)
 			
 			messages.success(request, user_successfully_created_msg)
 			return redirect('social_launch_referral', referring_user_id=user.id)
@@ -51,13 +39,17 @@ def index(request, referring_user_id=None):
 			except ValueError:
 				raise Http404
 		
-		if request.user.is_authenticated():
-			#TESTME
+		has_registered = request.user.is_authenticated() or request.session.get('username', '')
+		
+		if has_registered:
+			referrer_count = SocialLaunchProfile.objects.filter(referring_user=referring_user).count()
 			form = None
 		else:
 			form = UserSignupForm()
-			request.session[referrer_url_session_key] = request.META.get('HTTP_REFERER', '')
-			request.session[referring_user_id_session_key] = referring_user_id if referring_user_id is not None else ''
+			if referrer_url_session_key not in request.session:
+				request.session[referrer_url_session_key] = request.META.get('HTTP_REFERER', '')
+			if referring_user_id_session_key not in request.session:
+				request.session[referring_user_id_session_key] = referring_user_id if referring_user_id is not None else ''
 		
-	return render(request, 'social_launch/index.html', {'form' : form,})
+	return render(request, 'social_launch/index.html', {'form' : form, 'has_registered' : has_registered, 'referrer_count' : referrer_count})
 
