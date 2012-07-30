@@ -53,6 +53,7 @@ class IndexTestCase(BaseTestCase):
 		
 	def test_post_success_creates_new_user_with_referrer(self):
 		referrer_url = 'http://facebook.com'
+		
 		post_data = {'email' : 'foo@example.com'}
 		
 		session = SessionStore()
@@ -101,6 +102,7 @@ class IndexTestCase(BaseTestCase):
 		
 	def test_post_fails_invalid_email_with_referrer(self):
 		referrer_url = 'http://facebook.com'
+		
 		post_data = {'email' : 'fooexample.com'}
 		
 		session = SessionStore()

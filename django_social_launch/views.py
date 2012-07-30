@@ -33,6 +33,8 @@ def index(request, referring_user_id=None):
 			messages.success(request, user_successfully_created_msg)
 			return redirect('social_launch_referral', referring_user_id=user.id)
 	else:
+		form = UserSignupForm()
+		form.fields['referrer_url'].initial = request.META.get('HTTP_REFERER', '')
 		if referring_user_id is not None:
 			try:
 				referring_user = get_object_or_404(User, id=referring_user_id)
@@ -46,6 +48,7 @@ def index(request, referring_user_id=None):
 			form = None
 		else:
 			form = UserSignupForm()
+			
 			if referrer_url_session_key not in request.session:
 				request.session[referrer_url_session_key] = request.META.get('HTTP_REFERER', '')
 			if referring_user_id_session_key not in request.session:
