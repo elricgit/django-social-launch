@@ -43,8 +43,51 @@ Sign up for this awesome service!
 {% else %}
 <p>This user has referred {{ referrer_count }} user{{ referrer_count|pluralize }}.</p>
 
-
-
 {% endif %}
+<div>
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={{ FACEBOOK_APP_ID }}";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+
+	<div class="fb-like" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></div>
+	
+	
+	<a href="https://twitter.com/share" class="twitter-share-button" data-via="Sean_Hayes">Tweet</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	
+	
+	<!-- Place this tag where you want the su badge to render -->
+	<su:badge layout="2"></su:badge>
+
+	<!-- Place this snippet wherever appropriate -->
+	<script type="text/javascript">
+		(function() {
+			var li = document.createElement('script'); li.type = 'text/javascript'; li.async = true;
+			li.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + '//platform.stumbleupon.com/1/widgets.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(li, s);
+		})();
+	</script>
+	
+	
+	<!-- Place this tag where you want the +1 button to render -->
+	<g:plusone size="medium"></g:plusone>
+
+	<!-- Place this render call where appropriate -->
+	<script type="text/javascript">
+		(function() {
+			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			po.src = 'https://apis.google.com/js/plusone.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+		})();
+	</script>
+
+
+</div>
+
 {% endblock content %}
 
