@@ -2,92 +2,87 @@
 
 {% block title %}Sign up for this awesome service!{% endblock title %}
 
+{% block extra_head %}
+	<link rel="stylesheet" href="{{ STATIC_URL }}social_launch/style.css" type="text/css" />
+{% endblock extra_head %}
+
 {% block content %}
-{% if not has_registered %}
-Sign up for this awesome service!
-<form method="POST">
-{% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="Save" />
-</form>
+<div id="signup-panel">
+	{% if not has_registered %}
+	<p>
+		Sign up for this awesome service!
+	</p>
+	<form method="POST">
+	{% csrf_token %}
+	<p id="email-form">
+		{{ form.email }}
+		<input type="submit" value="Go" />
+	</p>
+	</form>
 
-<ul>
-	<li><a rel="nofollow" href="{% url socialauth_begin "twitter" %}">Twitter</a></li>
-	<li><a rel="nofollow" href="{% url socialauth_begin "facebook" %}">Facebook</a></li>
-	<li><a rel="nofollow" href="{% url socialauth_begin "linkedin" %}">Linkedin</a></li>
-	<li><a rel="nofollow" href="{% url socialauth_begin "orkut" %}">Orkut</a></li>
-	<li><a rel="nofollow" href="{% url socialauth_begin "google-oauth" %}">Google OAuth</a></li>
-	<li><a rel="nofollow" href="{% url socialauth_begin "google-oauth2" %}">Google OAuth2</a></li>
-	<li><a rel="nofollow" href="{% url socialauth_begin "google" %}">Google</a></li>
-	<li><a rel="nofollow" href="{% url socialauth_begin "yahoo" %}">Yahoo</a></li>
-	<li>
-		<form action="{% url socialauth_begin "livejournal" %}" method="post">{% csrf_token %}
-			<div>
-				<label for="openid_lj_user">LiveJournal user:</label>
-				<input id="openid_lj_user" type="text" value="" name="openid_lj_user" />
-				<input type="submit" value="Login"/>
-			</div>
-		</form>
-	</li>
-	<li>
-		<form action="{% url socialauth_begin "openid" %}" method="post">{% csrf_token %}
-			<div>
-				<label for="openid_identifier">Other provider</label>
-				<input id="openid_identifier" type="text" value="" name="openid_identifier" />
-				<input type="submit" value="Login" />
-			</div>
-			<p class="helptext">Like your personal <a href="https://www.myopenid.com/" title="My OpenId">myopenid</a></p>
-		</form>
-	</li>
-</ul>
-{% else %}
-<p>This user has referred {{ referrer_count }} user{{ referrer_count|pluralize }}.</p>
+	<ul>
+		<li><a rel="nofollow" href="{% url socialauth_begin "twitter" %}">Twitter</a></li>
+		<li><a rel="nofollow" href="{% url socialauth_begin "facebook" %}">Facebook</a></li>
+		<li><a rel="nofollow" href="{% url socialauth_begin "linkedin" %}">Linkedin</a></li>
+		<li><a rel="nofollow" href="{% url socialauth_begin "google-oauth2" %}">Google</a></li>
+		<li>
+			<form action="{% url socialauth_begin "openid" %}" method="post">{% csrf_token %}
+				<div>
+					<input id="openid_identifier" type="text" value="" placeholder="example.myopenid.com" name="openid_identifier" />
+					<input type="submit" value="Go" />
+				</div>
+			</form>
+		</li>
+	</ul>
+	{% else %}
+	<p>This user has referred {{ referrer_count }} user{{ referrer_count|pluralize }}.</p>
 
-{% endif %}
-<div>
-	<div id="fb-root"></div>
-	<script>(function(d, s, id) {
-		var js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) return;
-		js = d.createElement(s); js.id = id;
-		js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={{ FACEBOOK_APP_ID }}";
-		fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script>
+	{% endif %}
+	<div id="sharing-buttons">
+		<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={{ FACEBOOK_APP_ID }}";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
 
-	<div class="fb-like" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></div>
+		<div class="fb-like" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></div>
 	
 	
-	<a href="https://twitter.com/share" class="twitter-share-button" data-via="Sean_Hayes">Tweet</a>
-	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+		<a href="https://twitter.com/share" class="twitter-share-button" data-via="Sean_Hayes">Tweet</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	
+		<!-- Place this tag where you want the +1 button to render -->
+		<g:plusone size="medium"></g:plusone>
+
+		<!-- Place this render call where appropriate -->
+		<script type="text/javascript">
+			(function() {
+				var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+				po.src = 'https://apis.google.com/js/plusone.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+			})();
+		</script>
+		
+		<!-- Place this tag where you want the su badge to render -->
+		<su:badge layout="2"></su:badge>
+
+		<!-- Place this snippet wherever appropriate -->
+		<script type="text/javascript">
+			(function() {
+				var li = document.createElement('script'); li.type = 'text/javascript'; li.async = true;
+				li.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + '//platform.stumbleupon.com/1/widgets.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(li, s);
+			})();
+		</script>
 	
 	
-	<!-- Place this tag where you want the su badge to render -->
-	<su:badge layout="2"></su:badge>
-
-	<!-- Place this snippet wherever appropriate -->
-	<script type="text/javascript">
-		(function() {
-			var li = document.createElement('script'); li.type = 'text/javascript'; li.async = true;
-			li.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + '//platform.stumbleupon.com/1/widgets.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(li, s);
-		})();
-	</script>
-	
-	
-	<!-- Place this tag where you want the +1 button to render -->
-	<g:plusone size="medium"></g:plusone>
-
-	<!-- Place this render call where appropriate -->
-	<script type="text/javascript">
-		(function() {
-			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-			po.src = 'https://apis.google.com/js/plusone.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-		})();
-	</script>
 
 
+
+	</div>
 </div>
-
 {% endblock content %}
 

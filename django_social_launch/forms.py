@@ -9,6 +9,7 @@ class UserSignupForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super(UserSignupForm, self).__init__(*args, **kwargs)
 		self.fields['email'].required = True
+		self.fields['email'].widget.attrs['placeholder'] = 'me@example.com'
 		
 	def clean(self):
 		cleaned_data = self.cleaned_data

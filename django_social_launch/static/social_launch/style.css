@@ -1,0 +1,30 @@
+#signup-panel{
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+	background-color: rgba(0, 0, 0, 0.75);
+	color: #dddddd;
+	
+}
+
+#signup-panel a{
+	color: #cccccc;
+}
+
+#signup-panel p:first-child{
+	text-align: center;
+	padding-top: 2em;
+	padding-bottom: 1em;
+}
+
+#sharing-buttons{
+	padding-top: 2em;
+	padding-bottom: 1em;
+	width:380px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#email-form{
+	text-align: center;
+}
